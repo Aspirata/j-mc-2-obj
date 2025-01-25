@@ -117,7 +117,7 @@ public class ChunkProcessor
 		}
 
 		// Disable optimization for blocks containing "leaves"
-		if (tex.getPath().contains("leaves")) {
+		if (tex.toString().contains("leaves")) {
 			canOptimise = false;
 		}
 
