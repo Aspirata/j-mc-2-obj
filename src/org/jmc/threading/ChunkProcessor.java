@@ -33,22 +33,20 @@ public class ChunkProcessor
 	
 	private final ArrayList<Face> optimisedFaces = new ArrayList<Face>();
 	private final ArrayList<Face> faces = new ArrayList<Face>();
+	/**
+		* See: {@link #addFace(Vertex[], Vertex[], UV[], Transform, NamespaceID) addFace}
+		*/
+	public void addFace(Vertex[] verts, UV[] uv, Transform trans, NamespaceID tex) {
+		addFace(verts, null, uv, trans, tex, true); // Pass canOptimise = true initially
+	}
 
 	/**
-	 * See: {@link #addFace(Vertex[], Vertex[], UV[], Transform, NamespaceID) addFace}
-	 */
-	public void addFace(Vertex[] verts, UV[] uv, Transform trans, NamespaceID tex) {
-		addFace(verts, null, uv, trans, tex);
-	}
-	
-	/**
-	 * See: {@link #addFace(Vertex[], Vertex[], UV[], Transform, NamespaceID, boolean) addFace}
-	 */
+		* See: {@link #addFace(Vertex[], Vertex[], UV[], Transform, NamespaceID, boolean) addFace}
+		*/
 	public void addFace(Vertex[] verts, Vertex[] norms, UV[] uv, Transform trans, NamespaceID tex)
 	{
-		addFace(verts, norms, uv, trans, tex, true);
+		addFace(verts, norms, uv, trans, tex, true); // Pass canOptimise = true initially
 	}
-
 	/**
 	 * See: {@link #addFace(Vertex[], Vertex[], UV[], Transform, NamespaceID) addFace}
 	 */
@@ -117,9 +115,14 @@ public class ChunkProcessor
 		if (trans != null){
 			face = trans.multiply(face);
 		}
+
+		// Disable optimization for blocks containing "leaves"
+		if (tex.getPath().contains("leaves")) {
+			canOptimise = false;
+		}
+
 		addFace(face, canOptimise);
 	}
-
 	/**
 	 *
 	 * @param newFaces
